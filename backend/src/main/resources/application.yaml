@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: backend
+  liquibase:
+    enabled: false
+  config:
+    import: "classpath:workshops.yaml"
