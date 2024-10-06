@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingService {
-    List<BookingTimeItem> getAvailableTimes(LocalDateTime from, LocalDateTime to);
+    List<BookingTimeItem> getAvailableTimes(String from, String to);
     void bookTime(String identifier, String contactInfo);
 }

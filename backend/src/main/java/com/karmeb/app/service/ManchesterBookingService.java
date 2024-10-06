@@ -1,23 +1,56 @@
 package com.karmeb.app.service;
 
-import com.karmeb.app.model.BookingTimeItem;
+import static com.karmeb.app.util.DateConverter.convertStringToLocalDateTime;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import java.time.LocalDateTime;
+import com.karmeb.app.model.BookingTimeItem;
+import com.karmeb.app.model.BookingRequest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ManchesterBookingService extends AbstractBookingService {
-
-    @Override
-    public List<BookingTimeItem> fetchAvailableTimes(LocalDateTime from, LocalDateTime to) {
-        // TODO handle pagination and missing dates to parameter
-        // TODO Parse JSON and map to BookingTimeItem objects
-        // TODO return the list
-        // endpoint /tire-change-times
-        return null;
+    public ManchesterBookingService() {
+        super();
+        configureJsonRestClient();
     }
 
     @Override
-    public void handleBooking(String id, String contactInfo) {
-        // TODO: Create JSON request body and send to /tire-change-times/{id}/booking
+    protected List<BookingTimeItem> fetchAvailableTimes(String from, String to) {
+        String url = UriComponentsBuilder.fromHttpUrl(workshop.getApi() + "/tire-change-times")
+                .queryParam("from", from)
+                .toUriString();
+
+        ResponseEntity<List<BookingTimeItem>> result = restClient.get()
+                .uri(url)
+
+                .retrieve()
+                .toEntity(new ParameterizedTypeReference<>(){});
+
+        List<BookingTimeItem> fetchedTimes = result.getBody();
+        if ( fetchedTimes == null || fetchedTimes.isEmpty()) {
+            return new ArrayList<>();
+
+        }
+
+        LOGGER.info("fetched times from Manchester: {}, status {}", fetchedTimes, result.getStatusCode());
+
+        return filterAvailableTimesBeforeDate(result.getBody(), convertStringToLocalDateTime(to));
+    }
+
+    @Override
+    protected void handleBooking(String id, String contactInfo) {
+        BookingRequest bookingRequest = new BookingRequest(contactInfo);
+        ResponseEntity<Void> response = restClient.post()
+                .uri(workshop.getApi() + "/tire-change-times/{id}/booking", id)
+                .contentType(APPLICATION_JSON)
+                .body(bookingRequest)
+                .retrieve()
+                .toBodilessEntity();
     }
 }
