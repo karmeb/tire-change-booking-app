@@ -52,8 +52,8 @@ public class BookingServiceFactory {
     }
 
     private boolean workshopFilterCriteria(WorkshopConfigProperties.Workshop workshop, List<String> names, List<String> vehicleTypes) {
-        boolean isMatchingName = names.isEmpty() || names.contains(workshop.getName());
-        boolean isMatchingVehicleType = vehicleTypes.isEmpty() || workshop.getVehicleTypes().stream().anyMatch(vehicleTypes::contains);
+        boolean isMatchingName = names == null || names.isEmpty() || names.contains(workshop.getName());
+        boolean isMatchingVehicleType = vehicleTypes == null ||vehicleTypes.isEmpty() || workshop.getVehicleTypes().stream().anyMatch(vehicleTypes::contains);
         return isMatchingName && isMatchingVehicleType;
     }
 

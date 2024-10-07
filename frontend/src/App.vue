@@ -3,8 +3,8 @@
 <!--  <h1 class="is-primary title is-3 has-text-centered has-text-weight-semibold is-family-code has-text-primary">
     Book Tire Change Time
   </h1>-->
-  <BookingFilter></BookingFilter>
-  <TimeCardsSection></TimeCardsSection>
+  <BookingFilter @filter-applied="updateFilters" ></BookingFilter>
+  <TimeCardsSection v-if="filters" :filters="filters"></TimeCardsSection>
 </template>
 
 <script>
@@ -17,12 +17,24 @@ export default {
   components: {
     BookingNavBar,
     BookingFilter,
-    TimeCardsSection
+    TimeCardsSection,
+  },
+  data () {
+    return {
+      filters: {
+        workshopNames: [],
+        machineType: [],
+        timeFrom: '2024-10-07',
+        timeTo: '2024-10-17',
+      }
+    }
+  },
+  methods: {
+    updateFilters(newFilters) {
+      this.filters = newFilters;
+    }
   }
 }
-
-
-
 </script>
 
 

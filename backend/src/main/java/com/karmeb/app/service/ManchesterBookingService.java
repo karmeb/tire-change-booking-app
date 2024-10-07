@@ -3,8 +3,10 @@ package com.karmeb.app.service;
 import static com.karmeb.app.util.DateConverter.convertStringToLocalDateTime;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import com.karmeb.app.model.BookingTimeItem;
+import com.karmeb.app.model.BookingDetails;
 import com.karmeb.app.model.BookingRequest;
+import com.karmeb.app.model.BookingTimeItem;
+import com.karmeb.app.model.BookingRequestDto;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,7 @@ public class ManchesterBookingService extends AbstractBookingService {
     }
 
     @Override
-    protected List<BookingTimeItem> fetchAvailableTimes(String from, String to) {
+    protected List<BookingDetails> fetchAvailableTimes(String from, String to) {
         String url = UriComponentsBuilder.fromHttpUrl(workshop.getApi() + "/tire-change-times")
                 .queryParam("from", from)
                 .toUriString();
@@ -37,10 +39,10 @@ public class ManchesterBookingService extends AbstractBookingService {
             return new ArrayList<>();
 
         }
-
         LOGGER.info("fetched times from Manchester: {}, status {}", fetchedTimes, result.getStatusCode());
+        List<BookingTimeItem> filteredTimeItems = filterAvailableTimesBeforeDate(result.getBody(), convertStringToLocalDateTime(to));
 
-        return filterAvailableTimesBeforeDate(result.getBody(), convertStringToLocalDateTime(to));
+        return addWorkshopDetails(filteredTimeItems);
     }
 
     @Override

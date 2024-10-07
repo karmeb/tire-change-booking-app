@@ -1,5 +1,6 @@
 package com.karmeb.app.service;
 
+import com.karmeb.app.model.BookingDetails;
 import com.karmeb.app.model.BookingTimeItem;
 import com.karmeb.app.model.BookingTimeItemXmlList;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class LondonBookingService extends AbstractBookingService {
     }
 
     @Override
-    public List<BookingTimeItem> fetchAvailableTimes(String from, String to) {
+    public List<BookingDetails> fetchAvailableTimes(String from, String to) {
         String url = UriComponentsBuilder.fromHttpUrl(workshop.getApi() + "/tire-change-times/available")
                 .queryParam("from", from)
                 .queryParam("until", to)
@@ -32,8 +33,8 @@ public class LondonBookingService extends AbstractBookingService {
                 .retrieve()
                 .toEntity(BookingTimeItemXmlList.class);
         LOGGER.info("fetched times from London: {}, status {}", result.getBody(), result.getStatusCode());
-
-        return result.getBody() != null ? result.getBody().getItems() : new ArrayList<>();
+        List<BookingTimeItem> fetchedTimes = result.getBody() != null ? result.getBody().getItems() : new ArrayList<>();
+        return addWorkshopDetails(fetchedTimes);
     }
 
     @Override
