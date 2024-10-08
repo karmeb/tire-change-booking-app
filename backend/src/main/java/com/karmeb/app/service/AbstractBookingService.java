@@ -64,7 +64,7 @@ public abstract class  AbstractBookingService implements BookingService {
         }
 
         List<BookingTimeItem> filteredTimes = rawResponseList.stream()
-                .filter(timeItem -> timeItem.isAvailable() && timeItem.getTime().isBefore(to))
+                .filter(timeItem -> timeItem.isAvailable() && timeItem.getTime().isBefore(to.plusDays(1))  )
                 .toList();
         LOGGER.info("Filtered list of times: {}", filteredTimes);
         return  filteredTimes;

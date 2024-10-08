@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="applyFilters"
-        class="filter-container is-vcentered is-flex-direction-row is-justify-content-flex-end mr-4"
+        class="filter-container is-vcentered is-flex-direction-row is-justify-content-center mt-2"
         style="gap: 10px">
     <div class="field">
       <label class="label">Workshops</label>

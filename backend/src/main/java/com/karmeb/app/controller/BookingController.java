@@ -77,8 +77,7 @@ public class BookingController {
 
     @GetMapping("/available-workshops")
     public List<String> getAvailableWorkshops() {
-        LOGGER.info("Incoming get available workshop details ");
-
+        LOGGER.info("Incoming get available workshop");
         return workshopConfigProperties.getEnabledWorkshops().stream()
                 .map(WorkshopConfigProperties.Workshop::getName)
                 .toList();
@@ -87,7 +86,7 @@ public class BookingController {
 
     @GetMapping("/vehicle-types")
     public List<String> getSupportedVehicleTypes() {
-        LOGGER.info("Incoming get supported vehicle types details ");
+        LOGGER.info("Incoming get supported vehicle types");
         return workshopConfigProperties.getEnabledWorkshops().stream()
                 .flatMap(workshop -> workshop.getVehicleTypes().stream())
                 .distinct()
