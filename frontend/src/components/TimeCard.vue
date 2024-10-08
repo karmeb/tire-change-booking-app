@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card time-card-element">
     <div class="card-content">
       <div class="content">
         <p class="m-0 p-0 card-text has-text-weight-semibold">Workshop: {{booking.workshopName}}</p>
@@ -68,4 +68,11 @@ export default {
 </script>
 
 <style>
+
+.time-card-element {
+  width: 250px;
+}
+.content {
+  height: 100px;
+}
 </style>

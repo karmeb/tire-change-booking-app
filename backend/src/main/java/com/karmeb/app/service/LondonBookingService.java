@@ -2,15 +2,14 @@ package com.karmeb.app.service;
 
 import com.karmeb.app.model.BookingDetails;
 import com.karmeb.app.model.BookingTimeItem;
-import com.karmeb.app.model.BookingTimeItemXmlList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
+import com.karmeb.app.model.BookingTimeXmlWrapper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +27,25 @@ public class LondonBookingService extends AbstractBookingService {
                 .queryParam("until", to)
                 .toUriString();
 
-        ResponseEntity<BookingTimeItemXmlList> result = restClient.get()
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of((MediaType.TEXT_XML)));
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<BookingTimeXmlWrapper> result = restClient.get()
                 .uri(url)
+                .headers(httpHeaders -> headers.setAccept(List.of(MediaType.APPLICATION_XML)))
                 .retrieve()
-                .toEntity(BookingTimeItemXmlList.class);
-        LOGGER.info("fetched times from London: {}, status {}", result.getBody(), result.getStatusCode());
-        List<BookingTimeItem> fetchedTimes = result.getBody() != null ? result.getBody().getItems() : new ArrayList<>();
+                .toEntity(BookingTimeXmlWrapper.class);
+
+        BookingTimeXmlWrapper responseBody = result.getBody();
+
+        if ( responseBody == null || responseBody.getAvailableTimes().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<BookingTimeItem> fetchedTimes = responseBody.getAvailableTimes();
+        LOGGER.info("fetched times from London: {}, status {}", fetchedTimes, result.getStatusCode());
+
         return addWorkshopDetails(fetchedTimes);
     }
 

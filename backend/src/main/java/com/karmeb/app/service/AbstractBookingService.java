@@ -5,16 +5,14 @@ import com.karmeb.app.model.BookingDetails;
 import com.karmeb.app.model.BookingTimeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class  AbstractBookingService implements BookingService {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractBookingService.class);
@@ -54,7 +52,7 @@ public abstract class  AbstractBookingService implements BookingService {
     protected void configureXmlRestClient() {
         this.restClient = RestClient.builder()
                 .requestFactory(new HttpComponentsClientHttpRequestFactory())
-                .messageConverters(converters -> converters.add(new Jaxb2RootElementHttpMessageConverter()))
+                .messageConverters(converters -> converters.add(new MappingJackson2XmlHttpMessageConverter()))
                 .build();
     }
 
@@ -64,7 +62,7 @@ public abstract class  AbstractBookingService implements BookingService {
         }
 
         List<BookingTimeItem> filteredTimes = rawResponseList.stream()
-                .filter(timeItem -> timeItem.isAvailable() && timeItem.getTime().isBefore(to.plusDays(1))  )
+                .filter(timeItem -> timeItem.isAvailable() && timeItem.getTime().isBefore(to.plusDays(1)))
                 .toList();
         LOGGER.info("Filtered list of times: {}", filteredTimes);
         return  filteredTimes;
