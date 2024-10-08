@@ -1,8 +1,5 @@
 <template>
   <BookingNavBar></BookingNavBar>
-<!--  <h1 class="is-primary title is-3 has-text-centered has-text-weight-semibold is-family-code has-text-primary">
-    Book Tire Change Time
-  </h1>-->
   <BookingFilter @filter-applied="updateFilters" ></BookingFilter>
   <TimeCardsSection v-if="filters" :filters="filters"></TimeCardsSection>
 </template>

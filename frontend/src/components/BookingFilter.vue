@@ -1,45 +1,37 @@
 <template>
-
-  <form @submit.prevent="applyFilters" class="container is-flex is-flex-direction-row is-justify-content-flex-end padding my-2" style="gap:10px">
-    <div class="field is-flex is-flex-direction-column">
-      <label class="label">Workshop</label>
-      <div class="control">
-          <div class="select">
-            <select v-model="selectedWorkshops">
-              <option></option>
-              <option v-for="workshop in workshops" :key="workshop">
-                {{workshop}}
-              </option>
-            </select>
-          </div>
-      </div>
+  <form @submit.prevent="applyFilters"
+        class="filter-container is-vcentered is-flex-direction-row is-justify-content-flex-end mr-4"
+        style="gap: 10px">
+    <div class="field">
+      <label class="label">Workshops</label>
+        <multiselect v-model="selectedWorkshops"
+                     :options="workshops"
+                     :multiple="true"
+                     :close-on-select="false"
+                     :clear-on-select="false"
+                     :preserve-search="false"
+                     placeholder="Select workshop(s)"
+                     :preselect-first="false"
+                     :searchable="true"
+                     :allow-empty="true">
+        </multiselect>
     </div>
-    <div class="field is-flex is-flex-direction-column">
-      <label class="label">Machine Type</label>
-      <div class="control">
-        <div class="select">
-          <select v-model="selectedMachineTypes">
-            <option></option>
-            <option v-for="type in vehicleTypes" :key="type">
-              {{type}}
-            </option>
-          </select>
-        </div>
-      </div>
+    <div class="field">
+      <label class="label">Vehicle types</label>
+            <multiselect v-model="selectedVehicleTypes"
+                         :options="vehicleTypes"
+                         :multiple="true"
+                         :close-on-select="false"
+                         :clear-on-select="false"
+                         :preserve-search="false"
+                         placeholder="Select vehicle type(s)"
+                         :preselect-first="false"
+                         :searchable="true"
+                         :allow-empty="true">
+            </multiselect>
     </div>
-<!--    <div class="field is-flex is-flex-direction-column">
-      <label class="label">Time from</label>
-      <div class="control">
-        <div class="select">
-          <select v-model="timeFrom" >
-            <option>2024-10-17</option>
-          </select>
-        </div>
-      </div>
-    </div>-->
-    <div class="field is-flex is-flex-direction-column">
-      <div class="control">
-        <div class="select">
+    <div class="field">
+      <label class="label">Date range</label>
           <VueDatePicker
               v-model="dateRange"
               :auto-apply="true"
@@ -50,13 +42,9 @@
               :min-date="new Date()"
               required>
           </VueDatePicker>
-        </div>
-      </div>
     </div>
-    <div class="field is-align-content-center">
-      <div class="control">
-        <button class="button is-link">Filter available times</button>
-      </div>
+    <div class="field">
+        <button class="button is-link form-submit-button">Filter available times</button>
     </div>
   </form>
 
@@ -67,14 +55,15 @@ import BookingService from "@/service/BookingService";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import Util from "@/util/Util";
+import Multiselect from 'vue-multiselect'
 
 
 export default {
-  components: {VueDatePicker},
+  components: { VueDatePicker, Multiselect },
   data() {
     return {
       selectedWorkshops: [],
-      selectedMachineTypes: [],
+      selectedVehicleTypes: [],
       workshops: [],
       vehicleTypes: [],
       dateRange: null,
@@ -84,7 +73,7 @@ export default {
     applyFilters() {
       this.$emit('filter-applied', {
         workshopNames:  this.selectedWorkshops,
-        machineType: this.selectedMachineTypes,
+        machineType: this.selectedVehicleTypes,
         timeFrom: Util.formatDateToString(this.dateRange[0]),
         timeTo: Util.formatDateToString(this.dateRange[1]),
       })
@@ -114,5 +103,16 @@ export default {
 </script>
 
 <style>
+@import '~vue-multiselect/dist/vue-multiselect.min.css';
+.form-submit-button{
+  margin-top: 20px;
+}
+
+.filter-container.is-vcentered {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+}
 
 </style>
