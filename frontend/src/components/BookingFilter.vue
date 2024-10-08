@@ -1,6 +1,6 @@
 <template>
 
-  <div class="container is-flex is-flex-direction-row is-justify-content-flex-end padding my-2" style="gap:10px">
+  <form @submit.prevent="applyFilters" class="container is-flex is-flex-direction-row is-justify-content-flex-end padding my-2" style="gap:10px">
     <div class="field is-flex is-flex-direction-column">
       <label class="label">Workshop</label>
       <div class="control">
@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="field is-flex is-flex-direction-column">
+<!--    <div class="field is-flex is-flex-direction-column">
       <label class="label">Time from</label>
       <div class="control">
         <div class="select">
@@ -36,38 +36,48 @@
           </select>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="field is-flex is-flex-direction-column">
-      <label class="label">Time to</label>
       <div class="control">
         <div class="select">
-          <select v-model="timeTo">
-            <option>2024-10-20</option>
-          </select>
+          <VueDatePicker
+              v-model="dateRange"
+              :auto-apply="true"
+              range
+              :enable-time-picker="false"
+              :clearable="false"
+              placeholder="Select date range"
+              :min-date="new Date()"
+              required>
+          </VueDatePicker>
         </div>
       </div>
     </div>
     <div class="field is-align-content-center">
       <div class="control">
-        <button @click="applyFilters" class="button is-link">Filter available times</button>
+        <button class="button is-link">Filter available times</button>
       </div>
     </div>
-  </div>
+  </form>
 
 </template>
 
 <script>
 import BookingService from "@/service/BookingService";
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import Util from "@/util/Util";
+
 
 export default {
+  components: {VueDatePicker},
   data() {
     return {
       selectedWorkshops: [],
       selectedMachineTypes: [],
-      timeFrom: '',
-      timeTo: '',
       workshops: [],
       vehicleTypes: [],
+      dateRange: null,
     }
   },
   methods: {
@@ -75,8 +85,8 @@ export default {
       this.$emit('filter-applied', {
         workshopNames:  this.selectedWorkshops,
         machineType: this.selectedMachineTypes,
-        timeFrom: this.timeFrom,
-        timeTo: this.timeTo,
+        timeFrom: Util.formatDateToString(this.dateRange[0]),
+        timeTo: Util.formatDateToString(this.dateRange[1]),
       })
     },
     async fetchAvailableWorkshopNames() {
@@ -94,7 +104,7 @@ export default {
       } catch (err) {
         console.error("error fetching vehicle types: ", err);
       }
-    },
+    }
   },
   mounted() {
     this.fetchSupportedVehicleTypes();

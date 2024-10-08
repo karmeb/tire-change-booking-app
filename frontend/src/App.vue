@@ -11,6 +11,7 @@
 import BookingNavBar from './components/BookingNavBar.vue'
 import BookingFilter from './components/BookingFilter.vue'
 import TimeCardsSection from "@/components/TimeCardsSection.vue";
+import Util from "@/util/Util";
 
 export default {
   name: 'App',
@@ -24,8 +25,8 @@ export default {
       filters: {
         workshopNames: [],
         machineType: [],
-        timeFrom: '2024-10-07',
-        timeTo: '2024-10-17',
+        timeFrom: Util.formatDateToString(new Date()),
+        timeTo: Util.formatDateToString(Util.getFutureDate(14)),
       }
     }
   },
