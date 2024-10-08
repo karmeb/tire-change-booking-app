@@ -34,15 +34,15 @@ public class BookingController {
     public List<BookingDetails> getAvailableTimes(
             @RequestParam String from,
             @RequestParam String to,
-            @RequestParam(required = false) List<String> workshop,
-            @RequestParam(required = false) List<String> vehicleType) {
+            @RequestParam(required = false) List<String> workshops,
+            @RequestParam(required = false) List<String> vehicleTypes) {
 
         LOGGER.info("Incoming get available times request, from: {}, to: {}, workshops: {}, vehicleType: {} ",
-                from, to, workshop, vehicleType);
+                from, to, workshops, vehicleTypes);
 
         List<BookingDetails> allAvailableTimes = new ArrayList<>();
 
-        List<WorkshopConfigProperties.Workshop> filteredWorkshops = serviceFactory.filterWorkshops(workshop, vehicleType);
+        List<WorkshopConfigProperties.Workshop> filteredWorkshops = serviceFactory.filterWorkshops(workshops, vehicleTypes);
 
         for (WorkshopConfigProperties.Workshop shop : filteredWorkshops) {
             try {
