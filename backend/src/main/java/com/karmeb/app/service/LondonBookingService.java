@@ -1,6 +1,9 @@
 package com.karmeb.app.service;
 
+import static org.springframework.http.MediaType.TEXT_XML;
+
 import com.karmeb.app.model.BookingDetails;
+import com.karmeb.app.model.BookingRequest;
 import com.karmeb.app.model.BookingTimeItem;
 import com.karmeb.app.model.BookingTimeXmlWrapper;
 import org.springframework.http.HttpEntity;
@@ -50,8 +53,14 @@ public class LondonBookingService extends AbstractBookingService {
     }
 
     @Override
-    public void handleBooking(String uuid, String contactInfo) {
-        // TODO: Create an XML request body send it to /tire-change-times/{uuid}/booking
+    public void handleBooking(String id, String contactInfo) {
+        BookingRequest bookingRequest = new BookingRequest(contactInfo);
+        ResponseEntity<Void> response = restClient.put()
+                .uri(workshop.getApi() + "/tire-change-times/{id}/booking", id)
+                .contentType(TEXT_XML)
+                .body(bookingRequest)
+                .retrieve()
+                .toBodilessEntity();
     }
 
 

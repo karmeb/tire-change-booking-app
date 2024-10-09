@@ -34,6 +34,7 @@ import {faClock, faMap, } from "@fortawesome/free-regular-svg-icons";
 import BookingModal from "@/components/BookingModal.vue";
 
 export default {
+  emits: ['update'],
   name: 'TimeCard',
   components: {
     BookingModal,

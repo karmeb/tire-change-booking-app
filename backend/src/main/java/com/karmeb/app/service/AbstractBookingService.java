@@ -40,7 +40,7 @@ public abstract class  AbstractBookingService implements BookingService {
         }
     }
 
-    protected abstract void handleBooking(String identifier, String contactInfo);
+    protected abstract void handleBooking(String id, String contactInfo);
 
     protected void configureJsonRestClient() {
         this.restClient = RestClient.builder()
