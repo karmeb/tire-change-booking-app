@@ -1,7 +1,6 @@
 package com.karmeb.app.service;
 
 import com.karmeb.app.config.WorkshopConfigProperties;
-import com.karmeb.app.controller.BookingController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +38,7 @@ public class BookingServiceFactory {
         LOGGER.debug("Getting booking service, workshop: {}", workshop);
 
         String serviceClassName = workshop.getServiceClass();
-        LOGGER.debug("service class name: {}", serviceClassName);
         BookingService bookingService = bookingServicesMap.get(serviceClassName);
-        LOGGER.debug("booking service: {}", bookingService);
 
         if (bookingService instanceof AbstractBookingService) {
             LOGGER.debug("Service {} got workshop config set: {}", bookingService, workshop);

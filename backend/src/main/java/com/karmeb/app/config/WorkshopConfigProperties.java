@@ -1,6 +1,5 @@
 package com.karmeb.app.config;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -6,7 +6,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.karmeb.app.model.BookingDetails;
 import com.karmeb.app.model.BookingRequest;
 import com.karmeb.app.model.BookingTimeItem;
-import com.karmeb.app.model.BookingRequestDto;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
