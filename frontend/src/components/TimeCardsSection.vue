@@ -11,9 +11,9 @@
       </p>
     </div>
 
-    <div v-if="!loading && !error && availableTimes.length" class="columns is-multiline is-centered">
-      <div v-for="time in availableTimes" :key="time.id">
-        <div class="column"><TimeCard :booking="time" @update="handleBookingUpdate"></TimeCard></div>
+    <div v-if="!loading && !error && availableTimes.length" class="grid is-col-min-10">
+      <div class="cell" v-for="time in availableTimes" :key="time.id">
+        <TimeCard :booking="time" @update="handleBookingUpdate"></TimeCard>
       </div>
     </div>
   </div>

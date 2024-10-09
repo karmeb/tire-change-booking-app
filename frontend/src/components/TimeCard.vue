@@ -70,9 +70,10 @@ export default {
 <style>
 
 .time-card-element {
-  width: 250px;
+  height: 100%;
 }
-.content {
-  height: 100px;
+
+.card-content {
+  height: 78%;
 }
 </style>
