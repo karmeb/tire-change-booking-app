@@ -1,7 +1,9 @@
 # Tire Change Booking App
 
 ## Overview
-This The Tire Change Booking App allows users to book appointments for tire changes at various workshops. The app is built using Java, Gradle, JavaScript, and Vue.js.
+This The Tire Change Booking App allows users to book appointments for tire changes at workshops provided Surmus/tire-change-workshop API servers. 
+The app is built using Java, Gradle, JavaScript, and Vue.js.
+
 ## Usage
 
 ### Prerequisites
