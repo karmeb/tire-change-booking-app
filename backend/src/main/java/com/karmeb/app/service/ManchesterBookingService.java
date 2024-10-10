@@ -1,6 +1,6 @@
 package com.karmeb.app.service;
 
-import static com.karmeb.app.util.DateConverter.convertStringToLocalDateTime;
+import static com.karmeb.app.util.Utilities.convertStringToLocalDateTime;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.karmeb.app.model.BookingDetails;
@@ -9,10 +9,11 @@ import com.karmeb.app.model.BookingTimeItem;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ManchesterBookingService extends AbstractBookingService {
@@ -23,13 +24,13 @@ public class ManchesterBookingService extends AbstractBookingService {
 
     @Override
     protected List<BookingDetails> fetchAvailableTimes(String from, String to) {
-        String url = UriComponentsBuilder.fromHttpUrl(workshop.getApi() + "/tire-change-times")
-                .queryParam("from", from)
-                .toUriString();
+        Map<String,String> queryParams = new HashMap<>();
+        queryParams.put("from", from);
+
+        String url = buildApiURLWithWQueryParams(workshop.getApi() + "/tire-change-times", queryParams);
 
         ResponseEntity<List<BookingTimeItem>> result = restClient.get()
                 .uri(url)
-
                 .retrieve()
                 .toEntity(new ParameterizedTypeReference<>(){});
 
@@ -54,4 +55,5 @@ public class ManchesterBookingService extends AbstractBookingService {
                 .retrieve()
                 .toBodilessEntity();
     }
+
 }

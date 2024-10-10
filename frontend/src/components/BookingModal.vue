@@ -19,19 +19,19 @@
             <div class="field">
               <label class="label">Name</label>
               <div class="control">
-                <input v-model="contactInfo.name" class="input" type="text" placeholder="Enter your name..." required minlength="2">
+                <input v-model="contactInfo.name" class="input" type="text" placeholder="John Doe" required minlength="2">
               </div>
             </div>
             <div class="field">
               <label class="label">E-mail</label>
               <div class="control">
-                <input v-model="contactInfo.email" class="input" type="email" placeholder="Enter your email..." required minlength="3">
+                <input v-model="contactInfo.email" class="input" type="email" placeholder="example@example.com" required minlength="3">
               </div>
             </div>
             <div class="field">
               <label class="label">Phone number</label>
               <div class="control">
-                <input v-model="contactInfo.phone" class="input" type="tel" placeholder="Enter your number..." required minlength="5">
+                <input v-model="contactInfo.phone" class="input" type="tel" placeholder="+372 5555555" required minlength="5" pattern="[+][0-9]+">
               </div>
             </div>
             <div class="control has-text-centered">

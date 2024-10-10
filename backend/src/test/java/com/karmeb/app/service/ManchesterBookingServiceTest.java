@@ -1,7 +1,9 @@
 package com.karmeb.app.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import com.karmeb.app.config.WorkshopConfigProperties;
 import com.karmeb.app.model.BookingDetails;
@@ -11,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,9 +63,9 @@ public class ManchesterBookingServiceTest {
     void addWorkshopDetailsAddsDetailsToAllTimes() {
         // Arrange
 
-        Mockito.when(workshop.getName()).thenReturn("Test Workshop");
-        Mockito.when(workshop.getAddress()).thenReturn("123 Test St");
-        Mockito.when(workshop.getVehicleTypes()).thenReturn(List.of("Car", "Truck"));
+        when(workshop.getName()).thenReturn("Test Workshop");
+        when(workshop.getAddress()).thenReturn("123 Test St");
+        when(workshop.getVehicleTypes()).thenReturn(List.of("Car", "Truck"));
 
         // Act
         List<BookingDetails> result = manchesterBookingService.addWorkshopDetails(bookingTimeItems);
@@ -99,5 +101,18 @@ public class ManchesterBookingServiceTest {
     void filterAvailableTimesBeforeDateKeepsDatesBeforeOrEqualToToDate() {
         List<BookingTimeItem> result1 = manchesterBookingService.filterAvailableTimesBeforeDate(bookingTimeItems, LocalDateTime.parse("2024-10-10T00:00:00"));
         assertEquals(2, result1.size());
+    }
+
+    @Test
+    void filterAvailableTimesBeforeDateReturnsNullWhenNullList() {
+        List<BookingTimeItem> result= manchesterBookingService.filterAvailableTimesBeforeDate(null, LocalDateTime.parse("2024-10-10T00:00:00"));
+        assertNull(result);
+    }
+
+    @Test
+    void filterAvailableTimesBeforeDateReturnsUnprocessedListWhenListEmpty() {
+        ArrayList<BookingTimeItem> emptyList = new ArrayList<>();
+        List<BookingTimeItem> result = manchesterBookingService.filterAvailableTimesBeforeDate(emptyList, LocalDateTime.parse("2024-10-10T00:00:00"));
+        assertEquals(emptyList, result);
     }
 }

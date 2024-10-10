@@ -6,15 +6,14 @@ import com.karmeb.app.model.BookingDetails;
 import com.karmeb.app.model.BookingRequest;
 import com.karmeb.app.model.BookingTimeItem;
 import com.karmeb.app.model.BookingTimeXmlWrapper;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class LondonBookingService extends AbstractBookingService {
@@ -25,18 +24,15 @@ public class LondonBookingService extends AbstractBookingService {
 
     @Override
     public List<BookingDetails> fetchAvailableTimes(String from, String to) {
-        String url = UriComponentsBuilder.fromHttpUrl(workshop.getApi() + "/tire-change-times/available")
-                .queryParam("from", from)
-                .queryParam("until", to)
-                .toUriString();
+        LocalDate untilDate = LocalDate.parse(to).plusDays(1);
+        Map<String,String> queryParams = new HashMap<>();
+        queryParams.put("from", from);
+        queryParams.put("until", untilDate.toString());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of((MediaType.TEXT_XML)));
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        String url = buildApiURLWithWQueryParams(workshop.getApi() + "/tire-change-times/available", queryParams);
 
         ResponseEntity<BookingTimeXmlWrapper> result = restClient.get()
                 .uri(url)
-                .headers(httpHeaders -> headers.setAccept(List.of(MediaType.APPLICATION_XML)))
                 .retrieve()
                 .toEntity(BookingTimeXmlWrapper.class);
 

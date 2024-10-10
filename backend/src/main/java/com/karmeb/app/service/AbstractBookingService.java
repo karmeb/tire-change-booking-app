@@ -9,10 +9,13 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class  AbstractBookingService implements BookingService {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractBookingService.class);
@@ -91,6 +94,17 @@ public abstract class  AbstractBookingService implements BookingService {
         }
         LOGGER.info("Booking times list with workshop details added: {}", bookingDetailsList);
         return bookingDetailsList;
+    }
+
+    public String buildApiURLWithWQueryParams(String apiUrl, Map<String, String> queryParams) {
+
+        if (apiUrl == null || apiUrl.isEmpty()) {
+            return "";
+        }
+
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(apiUrl);
+        queryParams.forEach(uriComponentsBuilder::queryParam);
+        return uriComponentsBuilder.toUriString();
     }
 
 }
