@@ -35,13 +35,11 @@ public class BookingServiceFactory {
     }
 
     public BookingService getBookingService(WorkshopConfigProperties.Workshop workshop) {
-        LOGGER.debug("Getting booking service, workshop: {}", workshop);
 
         String serviceClassName = workshop.getServiceClass();
         BookingService bookingService = bookingServicesMap.get(serviceClassName);
 
         if (bookingService instanceof AbstractBookingService) {
-            LOGGER.debug("Service {} got workshop config set: {}", bookingService, workshop);
             ((AbstractBookingService) bookingService).setWorkshop(workshop);
         }
 

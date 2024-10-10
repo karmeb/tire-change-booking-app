@@ -68,11 +68,9 @@ public abstract class  AbstractBookingService implements BookingService {
             return rawResponseList;
         }
 
-        List<BookingTimeItem> filteredTimes = rawResponseList.stream()
+        return rawResponseList.stream()
                 .filter(timeItem -> timeItem.isAvailable() && timeItem.getTime().isBefore(to.plusDays(1)))
                 .toList();
-        LOGGER.info("Filtered list of times: {}", filteredTimes);
-        return  filteredTimes;
     }
 
     protected List<BookingDetails> addWorkshopDetails(List<BookingTimeItem> timeItems){
@@ -92,7 +90,6 @@ public abstract class  AbstractBookingService implements BookingService {
                     .build();
             bookingDetailsList.add(bookingDetails);
         }
-        LOGGER.info("Booking times list with workshop details added: {}", bookingDetailsList);
         return bookingDetailsList;
     }
 

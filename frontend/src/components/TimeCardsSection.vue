@@ -6,7 +6,7 @@
     </div>
 
     <div v-if="!loading && !error && !availableTimes.length">
-      <p class="as-text-centered has-text-weight-medium has-text-info">
+      <p class="has-text-centered has-text-weight-medium has-text-info">
         No times available!
       </p>
     </div>

@@ -31,7 +31,7 @@
             <div class="field">
               <label class="label">Phone number</label>
               <div class="control">
-                <input v-model="contactInfo.phone" class="input" type="tel" placeholder="+372 5555555" required minlength="5" pattern="[+][0-9]+">
+                <input v-model="contactInfo.phone" class="input" type="tel" placeholder="+372 5555555" required minlength="5" pattern="[+][0-9 ]+">
               </div>
             </div>
             <div class="control has-text-centered">
@@ -113,6 +113,6 @@ export default {
 
 <style>
   .modal-flex-container {
-    gap: 20px;
+    gap: 50px;
   }
 </style>

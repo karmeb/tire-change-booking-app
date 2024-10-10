@@ -39,7 +39,7 @@ public class ManchesterBookingService extends AbstractBookingService {
             return new ArrayList<>();
 
         }
-        LOGGER.info("fetched times from Manchester: {}, status {}", fetchedTimes, result.getStatusCode());
+        LOGGER.info("fetched times from Manchester, status: {}", result.getStatusCode());
         List<BookingTimeItem> filteredTimeItems = filterAvailableTimesBeforeDate(result.getBody(), convertStringToLocalDateTime(to));
 
         return addWorkshopDetails(filteredTimeItems);

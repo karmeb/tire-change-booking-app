@@ -43,7 +43,7 @@ public class LondonBookingService extends AbstractBookingService {
         }
 
         List<BookingTimeItem> fetchedTimes = responseBody.getAvailableTimes();
-        LOGGER.info("fetched times from London: {}, status {}", fetchedTimes, result.getStatusCode());
+        LOGGER.info("fetched times from London: status {}", result.getStatusCode());
 
         return addWorkshopDetails(fetchedTimes);
     }
