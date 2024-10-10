@@ -25,7 +25,11 @@ public abstract class  AbstractBookingService implements BookingService {
 
     @Override
     public List<BookingDetails> getAvailableTimes(String from, String to) {
-        return fetchAvailableTimes(from, to);
+        try {
+            return fetchAvailableTimes(from, to);
+        } catch (Exception e) {
+            throw new RuntimeException( "Error while fetching times: " + e.getMessage());
+        }
     }
 
     protected abstract List<BookingDetails> fetchAvailableTimes(String from, String to);

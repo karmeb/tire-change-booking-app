@@ -1,48 +1,61 @@
 package com.karmeb.app.config;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mock;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
-@SpringBootTest
-class WorkshopConfigPropertiesTest {
+public class WorkshopConfigPropertiesTest {
 
-    private static final String URL_REGEX = "^(https?)://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$";
-
-    @Autowired
+    @Mock
     private WorkshopConfigProperties workshopConfigProperties;
 
-    @Test
-    void testWorkshopConfigProperties() {
-        List<WorkshopConfigProperties.Workshop> workshops = workshopConfigProperties.getWorkshops();
-        assertFalse(workshops.isEmpty(), "Workshops should not be empty");
+    @BeforeEach
+    void setUp() {
+        workshopConfigProperties = new WorkshopConfigProperties();
 
-        workshops.forEach(workshop -> {
-            assertNotNull(workshop.getName(), "Name should not be null");
-            assertFalse(workshop.getName().isEmpty(), "Name should not be empty");
-            assertFalse(workshop.getVehicleTypes().isEmpty(), "Vehicle types should not be empty");
-            assertNotNull(workshop.getAddress(), "Address should not be null");
-            assertFalse(workshop.getAddress().isEmpty(), "Address should not be empty");
-            assertNotNull(workshop.getServiceClass(), "Service class should not be null");
-            assertFalse(workshop.getServiceClass().isEmpty(), "Service class should not be empty");
-            assertFalse(workshop.getApi().isEmpty(), "API endpoint should not be empty");
-            assertNotNull(workshop.getApi(), "API endpoint should not be null");
-            assertTrue(Pattern.matches(URL_REGEX, workshop.getApi()), "API endpoint must be a valid URL");
-        });
+        WorkshopConfigProperties.Workshop workshop1 = new WorkshopConfigProperties.Workshop();
+        workshop1.setName("Enabled workshop");
+        workshop1.setEnabled(true);
+
+        WorkshopConfigProperties.Workshop workshop2 = new WorkshopConfigProperties.Workshop();
+        workshop2.setName("Inactive workshop");
+        workshop2.setEnabled(false);
+
+        workshopConfigProperties.setWorkshops(List.of(workshop1, workshop2));;
+    }
+
+    @Test
+    void getEnabledWorkshopByNameReturnsEnabledWorkshopName() {
+
+        WorkshopConfigProperties.Workshop enabledWorkshop = workshopConfigProperties.getEnabledWorkshopByName("Enabled workshop");
+        assertNotNull(enabledWorkshop);
+        assertTrue(enabledWorkshop.isEnabled());
 
     }
 
     @Test
-    void getEnabledWorkshopByName() {
-        WorkshopConfigProperties.Workshop workshop = workshopConfigProperties.getEnabledWorkshopByName("Workshop 1");
-        assertNotNull(workshop, "Workshop 1 should be enabled");
-        assertTrue(workshop.isEnabled(), "Workshop 1 should be enabled");
+    void getEnabledWorkshopByNameDoesNotReturnInactiveWorkshopName() {
+
+        WorkshopConfigProperties.Workshop enabledWorkshop = workshopConfigProperties.getEnabledWorkshopByName("Inactive workshop");
+        assertNull(enabledWorkshop);
+
     }
+
+    @Test
+    void getEnabledWorkshopsReturnsEnabledWorkshops() {
+
+        List<WorkshopConfigProperties.Workshop> enabledWorkshops = workshopConfigProperties.getEnabledWorkshops();
+        assertEquals(1, enabledWorkshops.size());
+        assertTrue(enabledWorkshops.get(0).isEnabled());
+        assertEquals("Enabled workshop", enabledWorkshops.get(0).getName());
+
+    }
+
 }
